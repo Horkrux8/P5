@@ -71,8 +71,8 @@ def openDoor(Degree):
             if ClientKey in data: # search for client message in serial com
                 print("HOST: Recognized client signal")
                 ser.write((HostKey+"0").encode()) if runmode != 3 else None
-                ser.close()
-                break
+                break 
+    ser.close()
 
 def configureServo():
     while True:

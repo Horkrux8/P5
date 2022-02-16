@@ -30,9 +30,10 @@ void loop(){
 
         if (incomingString.indexOf(HostKey) == 0){
             // If HostKey in incoming strip HostKey of incoming to find degree
-            Serial.println(ClientKey);
             int degree = incomingString.substring(HostKey.length()).toInt();
+            Serial.println("CLIENT: Turning to: "+String(degree));
             door.write(degree); 
+            Serial.println(ClientKey);
         }
     }
 }
