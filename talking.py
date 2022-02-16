@@ -10,8 +10,8 @@ r = sr.Recognizer()
 m = sr.Microphone()
 
 language_val = "de-DE"
-magic = "guten tag"
-runmode = 3 # 0 = record / 1 = usepremade audio file / 2 = skip record process / 3 = configure servo
+magic = "xylophon"
+runmode = 0 # 0 = record / 1 = usepremade audio file / 2 = skip record process / 3 = configure servo
 exitWord = ['quit', 'exit']
 serialcom = {"port":"/dev/ttyUSB0","baud":"9600"}
 
@@ -39,19 +39,19 @@ def record():
                 reply = "{}".format(value).encode("utf-8")
             else:
                 reply = "{}".format(value)
+
             if reply in exitWord:
                 print("Exit word found - bye, bye")
                 quit()
             else:
                 print("You said: %s" % reply)
+                return reply
         # Handling google reply errors
         except sr.UnknownValueError:
             print("The Google API could not understand the audio...")
         except sr.RequestError as e:
             print("!")
             #print("Couldn't request results from Google Speech Recognition service; {0}".format(e))
-        if reply is not None and not Empty:
-            return reply
 
 def openDoor(Degree):
     """Send serial message to trigger esp program"""
