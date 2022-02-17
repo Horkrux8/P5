@@ -1,7 +1,5 @@
 #!/bin/python3
 # Import of libraries
-from queue import Empty
-from time import sleep
 import speech_recognition as sr
 import serial
 
@@ -10,9 +8,9 @@ r = sr.Recognizer()
 m = sr.Microphone()
 
 language_val = "de-DE"
-magic = "xylophon"
+magic = "guten tag"
 runmode = 0 # 0 = record / 1 = usepremade audio file / 2 = skip record process / 3 = configure servo
-exitWord = ['quit', 'exit']
+exitWord = ['quit', 'exit', 'stop']
 serialcom = {"port":"/dev/ttyUSB0","baud":"9600"}
 
 def usepremade():
@@ -39,13 +37,10 @@ def record():
                 reply = "{}".format(value).encode("utf-8")
             else:
                 reply = "{}".format(value)
+            
+            print("You said: %s" % reply)
+            return reply
 
-            if reply in exitWord:
-                print("Exit word found - bye, bye")
-                quit()
-            else:
-                print("You said: %s" % reply)
-                return reply
         # Handling google reply errors
         except sr.UnknownValueError:
             print("The Google API could not understand the audio...")
@@ -82,23 +77,34 @@ def configureServo():
 def main():
     """Decided runmode and string recognition"""
     print("running in mode = %s" % runmode)
-    if runmode == 0:
-        recstring = record() 
-    elif runmode == 1:
-        recstring = usepremade()
-    elif runmode == 2:
-        recstring = magic
-    elif runmode == 3:
-        configureServo()
+    while True: # Keep running even on false reply
+        # Decide runmode (mostly for debug or should anything not work during presentations)
+        if runmode == 0:
+            recstring = record() 
+        elif runmode == 1:
+            recstring = usepremade()
+        elif runmode == 2:
+            recstring = magic
+        elif runmode == 3:
+            configureServo()
 
-    # Compare string with the wanted string
-    if recstring.lower() == magic.lower():
-        print("Magic word recognized = %s" % magic)
-        openDoor(90)
-        #os.system("echo 'your command goes here'")
+        # Compare string with the wanted string
+
+        # Open door to predefined value if string is magic
+        if recstring.lower() == magic.lower():
+            print("Magic word recognized = %s" % magic)
+            openDoor(90)
+            break
+
+        # Open door to said digit
+        if recstring.isdigit():
+            openDoor(recstring)
+
+        # Exit if string is in exitWords
+        if recstring in exitWord:
+            print("Exit word found - bye, bye")
+            quit()
 
 if __name__ == '__main__':
-    try:
-        main()
-    except KeyboardInterrupt:
-        pass
+    # This prevents execution on import - mostly to test openDoor() alone
+    main()
