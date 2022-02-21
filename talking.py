@@ -8,7 +8,7 @@ r = sr.Recognizer()
 m = sr.Microphone()
 
 language_val = "de-DE"
-magic = "guten tag"
+magic = "test"
 runmode = 0 # 0 = record / 1 = usepremade audio file / 2 = skip record process / 3 = configure servo
 exitWord = ['quit', 'exit', 'stop']
 serialcom = {"port":"/dev/ttyUSB0","baud":"9600"}

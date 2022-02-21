@@ -11,7 +11,7 @@ String ClientKey;
 // Setup
 Servo door;
 void setup(){
-    door.attach(0);
+    door.attach(0); // This is pin D3
     Serial.begin(9600);
     Serial.printf("\nCLIENT: Started \n");
     door.write(0); // Reset servo
@@ -29,10 +29,18 @@ void loop(){
         Serial.print("CLIENT: Found incoming serial: "+incomingString+"\n");
 
         if (incomingString.indexOf(HostKey) == 0){
-            // If HostKey in incoming strip HostKey of incoming to find degree
-            int degree = incomingString.substring(HostKey.length()).toInt();
-            Serial.println("CLIENT: Turning to: "+String(degree));
-            door.write(degree); 
+            // If incomingString starts with Hostkey, strip HostKey of incoming to find degree
+            int targetDegree = incomingString.substring(HostKey.length()).toInt();
+            int changeDegree;
+
+            Serial.println("CLIENT: Turning to: "+String(targetDegree));
+            // Slow down rotation by rotating +1 degree every 10ms
+            for (int currDegree=door.read(); currDegree!=targetDegree; currDegree += changeDegree) {
+                changeDegree = (currDegree > targetDegree) ? -1 : 1; // Negate direction
+                door.write(currDegree);
+                delay(10);
+            }
+            Serial.println("CLIENT: done");
             Serial.println(ClientKey);
         }
     }
