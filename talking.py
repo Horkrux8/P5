@@ -8,18 +8,10 @@ r = sr.Recognizer()
 m = sr.Microphone()
 
 language_val = "de-DE"
-magic = "test"
-runmode = 0 # 0 = record / 1 = usepremade audio file / 2 = skip record process / 3 = configure servo
+magic = "guten tag"
+runmode = 0 # 0 = record / 1 = skip record process / 2 = configure servo
 exitWord = ['quit', 'exit', 'stop']
 serialcom = {"port":"/dev/ttyUSB0","baud":"9600"}
-
-def usepremade():
-    """Sending an existing recording with the magic word to google for recognition"""
-    print("Trying voice recognition with premade file")
-    with sr.AudioFile("/home/lennart/piTalk/guten_tag.wav") as source:
-        audio = r.record(source)
-    reply = r.recognize_google(audio, language=language_val)
-    return reply
 
 def record():
     """Sending a new voice sample with magic word to google for recognition"""
@@ -58,14 +50,14 @@ def openDoor(Degree):
     HostKey = "{IDENTIFIER-HOST}"
     ClientKey = "{IDENTIFIER-CLIENT}"
 
-    ser.write((HostKey+str(Degree)).encode()) # Send host message
+    ser.write((HostKey+str(Degree)).encode())
+
     while True:
         if ser.in_waiting > 0:
             data = ser.readline().decode('utf-8').rstrip()
             print("HOST: Found incoming serial: "+data)
             if ClientKey in data: # search for client message in serial com
                 print("HOST: Recognized client signal")
-                ser.write((HostKey+"0").encode()) if runmode != 3 else None
                 break 
     ser.close()
 
@@ -82,10 +74,8 @@ def main():
         if runmode == 0:
             recstring = record() 
         elif runmode == 1:
-            recstring = usepremade()
-        elif runmode == 2:
             recstring = magic
-        elif runmode == 3:
+        elif runmode == 2:
             configureServo()
 
         # Compare string with the wanted string

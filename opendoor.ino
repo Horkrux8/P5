@@ -7,6 +7,8 @@ the identity string, after that it is activating a servoengine */
 String incomingString;
 String HostKey;
 String ClientKey;
+String TargetKey;
+String ChangeKey;
 
 // Setup
 Servo door;
@@ -29,19 +31,31 @@ void loop(){
         Serial.print("CLIENT: Found incoming serial: "+incomingString+"\n");
 
         if (incomingString.indexOf(HostKey) == 0){
-            // If incomingString starts with Hostkey, strip HostKey of incoming to find degree
+            // If incomingString starts with Hostkey, strip HostKey of incoming to find target & change rate
             int targetDegree = incomingString.substring(HostKey.length()).toInt();
-            int changeDegree;
+            int changeDegree = 4;
+            int currDegree = door.read();
+            int overflowDegree = (currDegree - targetDegree) % changeDegree;
+            changeDegree = (currDegree > targetDegree) ? changeDegree*-1 : changeDegree*1; // Negate direction
+            Serial.printf("CLIENT: Starting from: %d, target: %d, at rate: %d\n", currDegree, targetDegree, changeDegree);
+            
+            if (overflowDegree != 0){
+                door.write(currDegree + overflowDegree);
+                Serial.printf("Adjusting to step size: %d, starting from %d\n", changeDegree, currDegree - overflowDegree);
+                currDegree = currDegree + overflowDegree;
+            }
 
-            Serial.println("CLIENT: Turning to: "+String(targetDegree));
-            // Slow down rotation by rotating +1 degree every 10ms
-            for (int currDegree=door.read(); currDegree!=targetDegree; currDegree += changeDegree) {
-                changeDegree = (currDegree > targetDegree) ? -1 : 1; // Negate direction
+            // Slow down rotation by rotation +1 degree every 10ms
+            for (currDegree; currDegree!=targetDegree; currDegree += changeDegree) {
+                Serial.printf("CLIENT: Turning to: %d, target: %d, step size: %d \n", currDegree, targetDegree, changeDegree);
                 door.write(currDegree);
                 delay(10);
             }
-            Serial.println("CLIENT: done");
+
+            door.write(targetDegree); // Close any remaining gap to target
+            Serial.printf("CLIENT: done (at: %d) \n", door.read());
             Serial.println(ClientKey);
+            // Everything beyond ClientKey wont be readed by Host
         }
     }
 }
