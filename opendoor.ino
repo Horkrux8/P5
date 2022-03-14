@@ -2,7 +2,7 @@
 #include "Servo.h"
 
 /* This program is going to wait for a serial message containing
-the identity string, after that it is activating a servoengine */
+the HostKey string, after that it is activating a servoengine */
 
 String incomingString;
 String HostKey;
@@ -34,6 +34,7 @@ void loop(){
             // If incomingString starts with Hostkey, strip HostKey of incoming to find target & change rate
             int targetDegree = incomingString.substring(HostKey.length()).toInt();
             int changeDegree = 4;
+            int changeDelay = 10;
             int currDegree = door.read();
             int overflowDegree = (currDegree - targetDegree) % changeDegree;
             changeDegree = (currDegree > targetDegree) ? changeDegree*-1 : changeDegree*1; // Negate direction
@@ -45,11 +46,11 @@ void loop(){
                 currDegree = currDegree + overflowDegree;
             }
 
-            // Slow down rotation by rotation +1 degree every 10ms
+            // Slow down rotation by rotating +changeDegree° every changeDelay ms
             for (currDegree; currDegree!=targetDegree; currDegree += changeDegree) {
                 Serial.printf("CLIENT: Turning to: %d, target: %d, step size: %d \n", currDegree, targetDegree, changeDegree);
                 door.write(currDegree);
-                delay(10);
+                delay(changeDelay);
             }
 
             door.write(targetDegree); // Close any remaining gap to target

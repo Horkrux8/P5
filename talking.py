@@ -1,7 +1,5 @@
 #!/bin/python3
 # Import of libraries
-from re import S
-from tokenize import String
 from gtts import gTTS
 import speech_recognition as sr
 import serial
@@ -15,7 +13,7 @@ ser = serial.Serial(port, baud, timeout=1)
 ser.flush()
 print("Libraries Initialized")
 
-runmode = 2 # 0 = record / 1 = skip record process / 2 = configure servo
+runmode = 3 # 1 = record / 2 = skip record process / 3 = configure servo
 
 def record():
     """Sending a new voice sample with magic word to google for recognition"""
@@ -73,7 +71,6 @@ def recieve(Search_string):
             print("HOST Recieved: %s" % data)
             if Search_string in data:
                 print("HOST found: %s" % Search_string)
-                ser.close()
                 return data
 
 
@@ -89,11 +86,11 @@ def main():
     print("running in mode = %s" % runmode)
     while True: # Keep running even on false reply
         # Decide runmode (mostly for debug or should anything not work during presentations)
-        if runmode == 0:
+        if runmode == 1:
             recstring = record() 
-        elif runmode == 1:
-            recstring = c.magic
         elif runmode == 2:
+            recstring = c.magic
+        elif runmode == 3:
             configureServo()
 
         # Compare string with the wanted string
@@ -113,6 +110,7 @@ def main():
             print("Exit word found - bye, bye")
             quit()
         recieve(c.ClientKey) # Read esp serial debug
+        ser.close()
 
 if __name__ == '__main__':
     # This prevents execution on import

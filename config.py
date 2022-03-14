@@ -12,7 +12,7 @@ magic = "guten tag" # Word to recognize
 # System specific configuration preventing manual change when coding on different device
 if os.name == "posix":
     print(os.name)
-    serialcom["port"] = "/dev/ttyS0"
+    serialcom["port"] = "/dev/ttyUSB0"
     for value in audio_dict.keys():
         audio_dict[value] = os.getcwd()+"/audio/"+audio_dict[value]+".mp3" # Total path to audio files
     
