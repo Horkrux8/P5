@@ -1,6 +1,11 @@
 // Library import
 #include "Servo.h"
 
+// Config
+#define StartDegree 180; // Start from on power reset
+#define PIN 0; // 0 is D3
+#define baudrate 9600; // Communication speed
+
 /* This program is going to wait for a serial message containing
 the HostKey string, after that it is activating a servoengine */
 
@@ -13,10 +18,10 @@ String ChangeKey;
 // Setup
 Servo door;
 void setup(){
-    door.attach(0); // This is pin D3
-    Serial.begin(9600);
+    door.attach(PIN);
+    Serial.begin(baudrate);
     Serial.printf("\nCLIENT: Started \n");
-    door.write(0); // Reset servo
+    door.write(StartDegree); // Reset servo
 }
 
 void loop(){
@@ -42,7 +47,7 @@ void loop(){
             
             if (overflowDegree != 0){
                 door.write(currDegree + overflowDegree);
-                Serial.printf("Adjusting to step size: %d, starting from %d\n", changeDegree, currDegree - overflowDegree);
+                Serial.printf("Adjusting to step size: %d, starting from %d\n", changeDegree, currDegree + overflowDegree);
                 currDegree = currDegree + overflowDegree;
             }
 

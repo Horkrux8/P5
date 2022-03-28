@@ -6,26 +6,26 @@ import serial
 import config as c
 
 # Configuration
-r = sr.Recognizer()
-m = sr.Microphone()
+recognizer = sr.Recognizer()
+microphone = sr.Microphone()
 port, baud = [value for value in list(c.serialcom.values())]
 ser = serial.Serial(port, baud, timeout=1)
 ser.flush()
 print("Libraries Initialized")
 
-runmode = 3 # 1 = record / 2 = skip record process / 3 = configure servo
+runmode = 4 # 1 = record / 2 = skip record process / 3 = configure servo / 4 = special
 
 def record():
     """Sending a new voice sample with magic word to google for recognition"""
     print("Starting voice recognition")
     print("One moment...")
-    with m as source: r.adjust_for_ambient_noise(source) # Take ambient noise into account
+    with microphone as source: recognizer.adjust_for_ambient_noise(source) # Take ambient noise into account
     while True:
         print("Now Ready, listening in %s. (Press Ctrl+c to or say exit/quit/stop to quit)" % c.language_val)
-        with m as source: audio = r.listen(source) # m is microphone (see configuration)
+        with microphone as source: audio = recognizer.listen(source) # m is microphone (see configuration)
         print("found audio sample")
         try:
-            value = r.recognize_google(audio, language=c.language_val)
+            value = recognizer.recognize_google(audio, language=c.language_val)
             # Decoding google's answer if encoded
             if str is bytes:
                 reply = "{}".format(value).encode("utf-8")
@@ -41,21 +41,22 @@ def record():
 
 def play(play_string):
     """Play the given or audio associate with the string"""
-    print(c.audio_dict)
+    print("Existing audio files: " + str(c.audio_dict))
     if play_string in c.audio_dict.keys():
         # Play one of the audios defined in config
-        print("Found existing audio")
+        print("Found \"%s\" in list" % play_string)
         c.os.system("mpg123 -q " + c.audio_dict[play_string])
     else:
         # Create new audio by google
-        print("Creating temporary audio")
+        print("String \"%s\" not in list" % play_string)
         file = play_string+".mp3"
+        print("Creating audio: \"%s\"" % file)
         tts = gTTS(play_string, c.language_val[0:2]) # Take first two char from language_val (de)_DE
         tts.save(file)
         # Play audio using command line player
         c.os.system("mpg123 -q " + file)
         #c.os.system("rm " + file)
-    print("Said %s" % play_string)
+    print("Played %s" % c.audio_dict[play_string])
 
 
 def send(Send_string):
@@ -92,14 +93,20 @@ def main():
             recstring = c.magic
         elif runmode == 3:
             configureServo()
+        elif runmode == 4:
+            with microphone as source: audio = recognizer.listen(source)
+            play("Passwort")
+            recstring = record()
 
         # Compare string with the wanted string
 
         # Open door to predefined value if string is magic
         if recstring.lower() == c.magic.lower():
             print("Magic word recognized = %s" % c.magic)
-            send("90")
-            break
+            send("0")
+            recieve(c.ClientKey) # Read esp serial debug
+            ser.close()
+            quit()
 
         # Open door to said digit
         elif recstring.isdigit():
@@ -108,9 +115,8 @@ def main():
         # Exit if string is in exitWords
         elif recstring in c.exitWord:
             print("Exit word found - bye, bye")
+            ser.close()
             quit()
-        recieve(c.ClientKey) # Read esp serial debug
-        ser.close()
 
 if __name__ == '__main__':
     # This prevents execution on import
