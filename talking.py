@@ -13,7 +13,7 @@ ser = serial.Serial(port, baud, timeout=1)
 ser.flush()
 print("Libraries Initialized")
 
-runmode = 4 # 1 = record / 2 = skip record process / 3 = configure servo / 4 = special
+runmode = 3 # 1 = record / 2 = skip record process / 3 = configure servo
 
 def record():
     """Sending a new voice sample with magic word to google for recognition"""
@@ -41,22 +41,21 @@ def record():
 
 def play(play_string):
     """Play the given or audio associate with the string"""
-    print("Existing audio files: " + str(c.audio_dict))
+    print(c.audio_dict)
     if play_string in c.audio_dict.keys():
         # Play one of the audios defined in config
-        print("Found \"%s\" in list" % play_string)
+        print("Found existing audio")
         c.os.system("mpg123 -q " + c.audio_dict[play_string])
     else:
         # Create new audio by google
-        print("String \"%s\" not in list" % play_string)
+        print("Creating temporary audio")
         file = play_string+".mp3"
-        print("Creating audio: \"%s\"" % file)
         tts = gTTS(play_string, c.language_val[0:2]) # Take first two char from language_val (de)_DE
         tts.save(file)
         # Play audio using command line player
         c.os.system("mpg123 -q " + file)
         #c.os.system("rm " + file)
-    print("Played %s" % c.audio_dict[play_string])
+    print("Said %s" % play_string)
 
 
 def send(Send_string):
@@ -64,12 +63,12 @@ def send(Send_string):
     ser.write((c.HostKey+str(Send_string)).encode())
     #print("HOST Send: %s %s" % c.HostKey, Send_string)
 
-def recieve(Search_string):
+def receive(Search_string):
     """Read serial and search for the given String"""
     while True:
         if ser.in_waiting > 0:
             data = ser.readline().decode('utf-8').rstrip()
-            print("HOST Recieved: %s" % data)
+            print("HOST Received: %s" % data)
             if Search_string in data:
                 print("HOST found: %s" % Search_string)
                 return data
@@ -80,7 +79,7 @@ def configureServo():
     while True:
         print("Enter degree")
         send(input())
-        print(recieve(c.ClientKey))
+        print(receive(c.ClientKey))
 
 def main():
     """Decided runmode and string recognition"""
@@ -93,30 +92,26 @@ def main():
             recstring = c.magic
         elif runmode == 3:
             configureServo()
-        elif runmode == 4:
-            with microphone as source: audio = recognizer.listen(source)
-            play("Passwort")
-            recstring = record()
 
         # Compare string with the wanted string
 
         # Open door to predefined value if string is magic
         if recstring.lower() == c.magic.lower():
             print("Magic word recognized = %s" % c.magic)
-            send("0")
-            recieve(c.ClientKey) # Read esp serial debug
-            ser.close()
-            quit()
+            send("180") # actually 90 for the big Servo
+            break
 
         # Open door to said digit
         elif recstring.isdigit():
             send(recstring)
+            break
 
         # Exit if string is in exitWords
         elif recstring in c.exitWord:
             print("Exit word found - bye, bye")
-            ser.close()
             quit()
+        receive(c.ClientKey) # Read esp serial debug
+        ser.close()
 
 if __name__ == '__main__':
     # This prevents execution on import

@@ -2,17 +2,73 @@
 
 Dies ist eine Projektausarbeitung zum Bauen einer Sprachgesteuerten, automatischen Tür.
 
+## Vorwort
+
+Diese Dokument enthält in jeder Form Dokumentation & Reflexion
+Sie ist in verschiedenen Versionen erhältlich:
+- [Online](https://github.com/Horkrux8/P5)
+Dies ist die empfohlene Variante, der Code ist dort Zugänglich, dieses Dokument ist auf der Seite direkt sichtbar, hat ein Inhaltsverzeichnis und die Links funktionieren. (Eine Mathematische Funktion wird dort evtl. nicht korrekt dargestellt.)
+
+Von den folgenden Version rate ich ab aufgrund vielen mangelnden Funktionen:
+1. Papier
+- Keine Links
+- Kein Inhaltsverzeichnis
+- Fehlerhafte Codeblöcke
+- Fehlerhafte Formatierung
+Diese Version wird als Abgabe in einer Mappe vorliegen.
+
+2. README.html
+- Einige Fehlerhafte Links
+- Kein Inhaltsverzeichnis (bei falscher Software)
+Diese Datei liegt im abgegeben Zip-Archiv/READMEs vor.
+
+3. README.docx
+- Benötigt Software
+- Fehlerhafte Formatierung
+- Kein Inhaltsverzeichnis
+- Fehlerhafte Codeblöcke
+Diese Datei liegt im abgegebenen Zip-Archiv/READMEs vor.
+
+4. README.pdf
+- Keine Links
+- Kein Inhaltsverzeichnis
+- Fehlerhafte Codeblöcke
+- Fehlerhafte Formatierung
+Diese Datei liegt im abgegebenen Zip-Archiv/READMEs vor.
+
+
+Die Dokumentation / Reflexion ist aufgeteilt in fünf Kategorien welche zuerst alle Dokumentiert werden (Status zur Abgabe) und später Reflektiert werden (Verlauf der Bearbeitung).
 ## Dokumentation der Arbeitspakete
 
-### Material beschaffung
+### Material Beschaffung
 
 ### Öffnungsmechanismus
 
 ### Software / Hardware
 
-Die technische Umsetzung der Tür erfolgt mit zwei Geräten, einem Host (Laptop) und einem Client (Mikrocontronller / esp8266).
-Der Host startet das Programm und dies nimmt auf was gesagt wird, wenn es das gesuchtet Wort erkennt, wird der Client über das USB Kable benachrichtigt.
-Der Client dursucht dann die empfangene Nachricht nach der Servo Konfiguration und stellt den Servo ein.
+Die technische Umsetzung der Tür erfolgt mit zwei Geräten, einem Host (Laptop) und einem Client (Mikrocontroller / esp8266).
+Der Host startet das Programm und dies nimmt auf was gesagt wird, wenn es das gesuchte Wort erkennt, wird der Client über das USB Kable benachrichtigt.
+Der Client durchsucht dann die empfangene Nachricht nach der Servo Konfiguration und stellt den Servo ein.
+
+#### Vorwort - Codeblöcke
+
+*Die Codeblöcke der Dokumentation sind keine vollständige Repräsentation der fertigen Applikation sondern dienen als der Erklärung dieser.*
+
+---
+
+- Im folgendem Text wird des öfteren `in-Zeilen-Code` referiert (Dieser ist in den Blöcken wiederzufinden).
+- ##### Funktionen: `Funktions-Namen()` in Überschriften
+
+- Codeblöcke mit einer Generellen Beschreibung darüber:
+
+Dieser Codeblock dient als Beispiel zur Veranschaulichung der Formatierung.
+```python
+# von Datei-Namen: Funktions-Namen(), Conditional-Statement
+print("Ein Code Beispiel") # Mit Kommentar
+```
+- Und einer detaillierteren Benennung des Ablaufs darunter:
+
+Die erste Zeile Beschreibt die Position, dies hat meist ein `#` oder `//` davor, dies Kennzeichnet Kommentare.
 
 #### Genaueres - [talking.py](talking.py)
 
@@ -31,26 +87,26 @@ with microphone as source: recognizer.adjust_for_ambient_noise(source) # Take am
         with microphone as source: audio = recognizer.listen(source)
         print("found audio sample")
 ```
-Das Programm stellt sich Anfangs auf Störgerausche ein und speichert eine Tonaufnahme in `audio`.
+Das Programm stellt sich Anfangs auf Störgeräusche ein und speichert eine Tonaufnahme in `audio`.
 
-Diese Aufnahme wird an eine Google API gechickt, welche dann den erkannten Satz zurück schickt.
+Diese Aufnahme wird an eine Google API geschickt, welche dann den erkannten Satz zurück schickt.
 ```python
 # von talking.py: record()
 value = recognizer.recognize_google(audio, language=language_val)
 ```
-Danach wird `value` "decoded", also in normale Schrift umgewandelt.
+Danach wird `value` "decoded", also in normale Schrift umgewandelt und weitergegeben.
 
-##### Funktionen: `send(Send_string)` & `recieve(Search_string)`
+##### Funktionen: `send(Send_string)` & `receive(Search_string)`
 
 Diese Funktion ist der Sende Teil der Seriellen Kommunikation (**U**niversal-***S**erial*-**B**us)
 
 Hier nutze ich die Library: "pyserial" 
 Im code:
-`serial.Serial(port, geschwindigkeit, timeout).xyz()`
+`serial.Serial(port, Geschwindigkeit, timeout).xyz()`
 oder auch:
 `ser.xyz()`
 
-Anfangs konfiguriert das Programm die Schnitstelle mit den Werten aus [config.py](config.py).
+Anfangs konfiguriert das Programm die Schnittstelle mit den Werten aus [config.py](config.py).
 
 ```python
 # von talking.py
@@ -59,7 +115,7 @@ ser = serial.Serial(port, baud, timeout=1)
 ser.flush()
 ```
 
-Die Sende Funktion schickt einfach den gegeben Wert mit einem Identifizier Token auf die geteilte Serielle Schnittstelle.
+Die Sende Funktion schickt einfach den gegeben Wert `Send_string` mit einem Token zum Identifizieren auf die geteilte Serielle Schnittstelle.
 
 ```python 
 # von talking.py: send(Send_string)
@@ -67,13 +123,14 @@ ser.write((c.HostKey+str(Send_string)).encode())
     print("HOST Send: %s %s" % c.HostKey, Send_string)
 ```
 
-Die Empfangen Funktion stoppt das Programm solange bis es auf der Schnittstelle den gegebenen Wert: `Search_string` in den empfangenen Nachrichten: `data` findet.
+Die Empfangen Funktion stoppt das Programm solange bis es auf der Schnittstelle den gegebenen Wert: `Search_string` in den allen empfangenen Nachrichten: `data` findet.
+(`Search_string` ist in späterer Anwendung immer der Identifizier Token des Clients)
 ```python
-# von talking.py: recieve(Search_string)
+# von talking.py: receive(Search_string)
 while True:
         if ser.in_waiting > 0:
             data = ser.readline().decode('utf-8').rstrip()
-            print("HOST Recieved: %s" % data)
+            print("HOST Received: %s" % data)
             if Search_string in data:
                 print("HOST found: %s" % Search_string)
                 return data
@@ -108,7 +165,7 @@ Im code:
 `gTTS("xyz", "de").xyz()`
 oder:
 `tts.xyz()`
-Hier schicken wir an google, was wir gerne gesagt haben wollen, und google schickt eine Computer-generierte Tonaufnahme zurück, diese wird dann gespeichert, abgespielt und gelöscht.
+Hier schicken wir an google, was wir gerne gesagt haben wollen (`play_string`), und google schickt eine Computer-generierte Tonaufnahme zurück, diese wird dann gespeichert, abgespielt und gelöscht.
 ```python
 # von talking.py: play(play_string)
 else:
@@ -123,40 +180,40 @@ else:
 ```
 
 ##### Funktion: `main()`
-Diese Funktion verknüpft alles zusammen in einer geordneten Ablaufstruktur.
+Diese Funktion verknüpft alles zusammen in einer geordneten Ablaufstruktur. Sie wird am Ende aufgerufen.
 
 ```python
 # von talking.py: main()
 print("running in mode = %s" % runmode)
 while True: # Keep running even on false reply
     # Decide runmode (mostly for debug or should anything not work during presentations)
-    if runmode == 0:
+    if runmode == 1:
         recstring = record() 
-    elif runmode == 1:
-        recstring = c.magic
     elif runmode == 2:
+        recstring = c.magic
+    elif runmode == 3:
         configureServo()
 ```
 Hier gibt wird der Verlauf entschieden:
 1. Normal, Aufnehmen -> Servo verstellen.
 2. Spracherkennung Failsafe, Servo verstellen.
-3. Konfiguration, Servo je nach Nutzer eingabe verstellen.
+3. Konfiguration, Servo je nach Nutzer Eingabe verstellen.
 
-Nun wird entschieden ob jenes Word den unser Gewünschtes ist.
+Nun wird entschieden ob das Wort in `recstring` den unser Gewünschtes Wort in `c.magic` ist.
 ```python
 # von talking.py: main(), while True
 if recstring.lower() == c.magic.lower():
     print("Magic word recognized = %s" % c.magic)
-    send("90")
+    send("180") # actually 90 for the big Servo
     break
 ```
-Wenn dies der Fall ist, nutzen die vorher erwähnte `send(Send_string)` Funktion, welche darauf den Identifizier Token mit 90 an den Client schicken wird.
+Wenn dies der Fall ist, nutzen die vorher erwähnte `send(Send_string)` Funktion, welche darauf den Identifizier Token mit 180 an den Client schicken wird.
 Wie der Client die Nachricht versteht wird im nächsten Kapitel ([opendoor.ino](opendoor.ino)) erläutert.
 
-Zuletzt wird noch alles an die Konsole weitergegeben was auf der Seriellen Schnitstelle kommt. Sollte der Client Identifizier Token dabei sein, wird das Programm beendet. (Siehe Funktion [recieve()](#funktionen-sendsendstring--recievesearchstring))
+Zuletzt wird noch alles an die Konsole weitergegeben was auf der Seriellen Schnittstelle ankommt. Sollte der Client Identifizier Token dabei sein, wird das Programm beendet. (Siehe Funktion [receive()](#funktionen-sendsendstring--receivesearchstring))
 ```python
 # von talking.py: main(), while True
-recieve(c.ClientKey) # Read esp serial debug
+receive(c.ClientKey) # Read esp serial debug
 ser.close()
 ```
 
@@ -164,15 +221,26 @@ ser.close()
 
 Dies ist das Client Programm, welches für die Steuerung des Servos und Kommunikation mit dem Host zuständig ist.
 
-Hier nutzen wir `Servo.h`, eine Library (Im code: `Servo` oder auch `door.xyz()`)
+Hier nutzen wir `Servo.h`, eine Library (Im code: `Servo.xyz` oder auch `door.xyz()`)
+
+Am Anfang werden Setup Werte Konfiguriert:
+```cpp
+// von opendoor.ino
+#define StartDegree 0 // Start from on power reset
+#define PIN 4 // 4 is D2
+#define baudrate 9600 // Communication speed
+```
+- Der `StartDegree` gibt die Servo Rotation im geschlossenen Zustand an.
+- Der `PIN` ist der **P**ulse-**w**idth-**m**odulation Pin, er transferiert Daten zwischen dem Client und dem Servomotor.
+- Die `baudrate` ist die Kommunikationsgeschwindigkeit der Seriellen Schnittstelle, diese muss für Host & Client identisch sein.
 
 In der `setup()` Funktion aktivieren wir alle nötigen Libraries, die Serielle Schnittstelle und setzen den Servo auf seine Startposition.
 ```cpp
 // von opendoor.ino: setup()
-door.attach(0); // This is pin D3
-Serial.begin(9600);
+door.attach(PIN); // This is pin D3
+Serial.begin(baudrate);
 Serial.printf("\nCLIENT: Started \n");
-door.write(0); // Reset servo
+door.write(StartDegree); // Reset servo
 ```
 
 Nach dem Setup geht der Client in die `loop()` Funktion und wiederholt diese für immer.
@@ -188,10 +256,10 @@ Hier wartet der Client bis auf der Seriellen Schnittstelle Nachrichten kommen, d
 ```cpp
 // von opendoor.ino: loop(), if (Serial.available() > 0)
 if (incomingString.indexOf(HostKey) == 0){
-            // If incomingString starts with Hostkey, strip HostKey of incoming to find target & change rate
+            // If incomingString starts with HostKey, strip HostKey of incoming to find target & change rate
             int targetDegree = incomingString.substring(HostKey.length()).toInt();
-            int changeDegree = 4;
-            int changeDelay = 10;
+            int changeDegree = 4; // Degree to proceed in one turn
+            int changeDelay = 10; // Delay in ms between turns
             int currDegree = door.read();
             int overflowDegree = (currDegree - targetDegree) % changeDegree;
             changeDegree = (currDegree > targetDegree) ? changeDegree*-1 : changeDegree*1; // Negate direction
@@ -199,14 +267,14 @@ if (incomingString.indexOf(HostKey) == 0){
 Sollte die Nachricht den Host Identifizier Token enthalten wird dieser abgeschnitten und der Rest in `targetDegree` gespeichert (Servo Zielposition).
 Außerdem wird festgelegt in welchen Schritten, in welchen Zeitabständen und in welche Richtung sich der Servo dreht, wobei letzteres automatisch passiert.
 
-Da nicht jede Ziel Position in jeder Schrittgröße von jeder Start position erreichbar ist, wird hier der Rest der Division von Differenz Start-Ziel Positionen durch Schrittgröße genommen und zu der derzeitigen Position zugerechnet.
+Da nicht jede Ziel Position in jeder Schrittgröße von jeder Start position erreichbar ist, wird hier der Rest der Division von der Differenz von Start-Ziel Positionen durch die Schrittgröße genommen und zu der derzeitigen Position zugerechnet.
 ```math
 overflowDegree =(DerzeitigePos-ZielPos) \bmod Schrittgröße \\
 (30-80)\bmod 4 = 2
 ```
 Bei dem Versuch sich von 30° nach 80° mit einer Schrittgröße von 4 zu drehen würde darin Enden, dass der Motor sich auf eine falsche oder sogar nicht vorhandene Position dreht (-2°), was Probleme verursacht.
 
-Also passt das Programm die derzeitige Position so an, dass diese Restloss mit der Schrittgröße Teilbar ist.
+Also passt das Programm die derzeitige Position so an, dass diese Restlos mit der Schrittgröße Teilbar ist.
 ```cpp
 // von opendoor.ino: loop() if (Serial.available() > 0) -> if (incomingString.indexOf(HostKey) == 0)
 if (overflowDegree != 0){
@@ -226,15 +294,15 @@ for (currDegree; currDegree!=targetDegree; currDegree += changeDegree) {
     }
 ```
 Die Schleife läuft solange die derzeitige- von der Ziel- Position abweicht,
-bei jedem durchlauf wird der Wert der derzeitigen Position (`currDegree`) um die Schrittgröße (`changeDegree`) inkrementiert und der Servomotor zur dem gesteigerten Wert gedreht.
+bei jedem Durchlauf wird der Wert der derzeitigen Position (`currDegree`) um die Schrittgröße (`changeDegree`) inkrementiert und der Servomotor zur dem gesteigerten Wert gedreht.
 
-Als beendung des Programms wird sichergestellt das der Servo auch wirklich an der gewünschten Position ist und es wird eine Nachricht an den Host geschickt, dass dieser aufhören soll Debug Nachrichten auf die Konsole ausgeben soll und sich selber beendet.
+Bei der Beendung des Programms wird sichergestellt das der Servo auch wirklich an der gewünschten Position ist und es wird eine Nachricht an den Host geschickt, dass dieser aufhören soll Debug Nachrichten auf die Konsole ausgeben soll und sich selber beendet.
 ```cpp
 // von opendoor.ino: loop()
 door.write(targetDegree); // Close any remaining gap to target
 Serial.printf("CLIENT: done (at: %d) \n", door.read());
 Serial.println(ClientKey);
-// Everything beyond ClientKey wont be readed by Host
+// Everything beyond ClientKey wont be read by Host
 ```
 
 ### Qualitätsprüfung

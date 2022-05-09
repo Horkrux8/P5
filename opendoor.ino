@@ -2,9 +2,9 @@
 #include "Servo.h"
 
 // Config
-#define StartDegree 180; // Start from on power reset
-#define PIN 0; // 0 is D3
-#define baudrate 9600; // Communication speed
+#define StartDegree 0 // Start from on power reset
+#define PIN 4 // 4 is D2
+#define baudrate 9600 // Communication speed
 
 /* This program is going to wait for a serial message containing
 the HostKey string, after that it is activating a servoengine */
@@ -38,8 +38,8 @@ void loop(){
         if (incomingString.indexOf(HostKey) == 0){
             // If incomingString starts with Hostkey, strip HostKey of incoming to find target & change rate
             int targetDegree = incomingString.substring(HostKey.length()).toInt();
-            int changeDegree = 4;
-            int changeDelay = 10;
+            int changeDegree = 4; // Degree to proceed in one turn
+            int changeDelay = 10; // Delay in ms between turns
             int currDegree = door.read();
             int overflowDegree = (currDegree - targetDegree) % changeDegree;
             changeDegree = (currDegree > targetDegree) ? changeDegree*-1 : changeDegree*1; // Negate direction
@@ -61,7 +61,7 @@ void loop(){
             door.write(targetDegree); // Close any remaining gap to target
             Serial.printf("CLIENT: done (at: %d) \n", door.read());
             Serial.println(ClientKey);
-            // Everything beyond ClientKey wont be readed by Host
+            // Everything beyond ClientKey wont be read by Host
         }
     }
 }

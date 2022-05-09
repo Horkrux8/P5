@@ -1,31 +1,24 @@
-# A seperate file to store user configurable values
+# A separate file to store user configurable values
 import os
 
 HostKey = "{IDENTIFIER-HOST}" # String the client should look for
 ClientKey = "{IDENTIFIER-CLIENT}" # String the host should look for
 language_val = "de_DE" # Language the recording is in
-exitWord = ['quit', 'exit', 'stop'] # Words to exit the programm
+exitWord = ['quit', 'exit', 'stop'] # Words to exit the program
 serialcom = {"port":"COM5","baud":"9600"} # Serial configuration
-audio_dict = {"ExtraIdentifierFuerTest89":"test.mp3"} # custom AudioIdentifier:FileName.mp3 in ./audio (! No whitespace)
+audio_dict = {"test":"test","guten_tag":"guten_tag"} # AudioIdentifier:FileName in ./audio (! No whitespace)
 magic = "guten tag" # Word to recognize
-
-# Automatic generation of AudioIdentifier for files in ./audio
-os.chdir("./audio")
-for file in os.listdir("."):
-    audio_dict[file[:-4]] = file
 
 # System specific configuration preventing manual change when coding on different device
 if os.name == "posix":
     print("System: " + os.name)
     serialcom["port"] = "/dev/ttyUSB0"
+    os.chmod(serialcom["port"],666)
     for value in audio_dict.keys():
-        print(value)
-        audio_dict[value] = os.getcwd()+"/"+audio_dict[value] # Total path to audio files
+        audio_dict[value] = os.getcwd()+"/audio/"+audio_dict[value]+".mp3" # Total path to audio files
     
 elif os.name == "nt":
     print("System: " + os.name)
-    serialcom["port"] = "COM7"
+    serialcom["port"] = "COM5"
     for value in audio_dict.keys():
-        audio_dict[value] = os.getcwd()+"\\"+audio_dict[value] # Total path to audio files
-
-print(audio_dict)
+        audio_dict[value] = os.getcwd()+"\\audio\\"+audio_dict[value]+".mp3" # Total path to audio files
