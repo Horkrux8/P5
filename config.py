@@ -13,7 +13,6 @@ magic = "guten tag" # Word to recognize
 if os.name == "posix":
     print("System: " + os.name)
     serialcom["port"] = "/dev/ttyUSB0"
-    os.chmod(serialcom["port"],666)
     for value in audio_dict.keys():
         audio_dict[value] = os.getcwd()+"/audio/"+audio_dict[value]+".mp3" # Total path to audio files
     

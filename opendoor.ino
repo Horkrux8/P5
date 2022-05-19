@@ -2,8 +2,8 @@
 #include "Servo.h"
 
 // Config
-#define StartDegree 0 // Start from on power reset
-#define PIN 4 // 4 is D2
+#define StartDegree 180 // Start from on power reset
+#define PIN 2 // 4 is D2 / 2 is D4
 #define baudrate 9600 // Communication speed
 
 /* This program is going to wait for a serial message containing

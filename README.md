@@ -4,12 +4,14 @@ Dies ist eine Projektausarbeitung zum Bauen einer Sprachgesteuerten, automatisch
 
 ## Vorwort
 
-Diese Dokument enthält in jeder Form Dokumentation & Reflexion
+Dieses Dokument enthält in jeder Form Dokumentation & Reflexion
 Sie ist in verschiedenen Versionen erhältlich:
-- [Online](https://github.com/Horkrux8/P5)
-Dies ist die empfohlene Variante, der Code ist dort Zugänglich, dieses Dokument ist auf der Seite direkt sichtbar, hat ein Inhaltsverzeichnis und die Links funktionieren. (Eine Mathematische Funktion wird dort evtl. nicht korrekt dargestellt.)
 
-Von den folgenden Version rate ich ab aufgrund vielen mangelnden Funktionen:
+- [Online](https://github.com/Horkrux8/P5)
+Dies ist die empfohlene Variante, der Code ist dort zugänglich, dieses Dokument ist auf der Seite direkt sichtbar, hat ein Inhaltsverzeichnis und die Links funktionieren. (Eine Mathematische Funktion wird dort evtl. nicht korrekt dargestellt.)
+
+Von den folgenden Versionen rate ich ab aufgrund vielen mangelnden Funktionen:
+
 1. Papier
 - Keine Links
 - Kein Inhaltsverzeichnis
@@ -31,13 +33,13 @@ Diese Datei liegt im abgegebenen Zip-Archiv/READMEs vor.
 
 4. README.pdf
 - Keine Links
-- Kein Inhaltsverzeichnis
 - Fehlerhafte Codeblöcke
 - Fehlerhafte Formatierung
 Diese Datei liegt im abgegebenen Zip-Archiv/READMEs vor.
 
 
-Die Dokumentation / Reflexion ist aufgeteilt in fünf Kategorien welche zuerst alle Dokumentiert werden (Status zur Abgabe) und später Reflektiert werden (Verlauf der Bearbeitung).
+Die Dokumentation / Reflexion ist aufgeteilt in fünf Kategorien, welche zuerst alle Dokumentiert werden (Status zur Abgabe) und später reflektiert werden (Verlauf der Bearbeitung).
+
 ## Dokumentation der Arbeitspakete
 
 ### Material Beschaffung
@@ -52,11 +54,11 @@ Der Client durchsucht dann die empfangene Nachricht nach der Servo Konfiguration
 
 #### Vorwort - Codeblöcke
 
-*Die Codeblöcke der Dokumentation sind keine vollständige Repräsentation der fertigen Applikation sondern dienen als der Erklärung dieser.*
+*Die Codeblöcke der Dokumentation sind keine vollständige Repräsentation der fertigen Applikation, sondern dienen als der Erklärung dieser.*
 
 ---
 
-- Im folgendem Text wird des öfteren `in-Zeilen-Code` referiert (Dieser ist in den Blöcken wiederzufinden).
+- Im folgenden Text wird des Öfteren `in-Zeilen-Code` referiert (Dieser ist in den Blöcken wiederzufinden).
 - ##### Funktionen: `Funktions-Namen()` in Überschriften
 
 - Codeblöcke mit einer Generellen Beschreibung darüber:
@@ -68,7 +70,7 @@ print("Ein Code Beispiel") # Mit Kommentar
 ```
 - Und einer detaillierteren Benennung des Ablaufs darunter:
 
-Die erste Zeile Beschreibt die Position, dies hat meist ein `#` oder `//` davor, dies Kennzeichnet Kommentare.
+Die erste Zeile beschreibt die Position, dies hat meist ein `#` oder `//` davor, dies Kennzeichnet Kommentare.
 
 #### Genaueres - [talking.py](talking.py)
 
@@ -87,9 +89,9 @@ with microphone as source: recognizer.adjust_for_ambient_noise(source) # Take am
         with microphone as source: audio = recognizer.listen(source)
         print("found audio sample")
 ```
-Das Programm stellt sich Anfangs auf Störgeräusche ein und speichert eine Tonaufnahme in `audio`.
+Das Programm stellt sich am Anfang auf Störgeräusche ein und speichert eine Tonaufnahme in `audio`.
 
-Diese Aufnahme wird an eine Google API geschickt, welche dann den erkannten Satz zurück schickt.
+Diese Aufnahme wird an eine Google API geschickt, welche dann den erkannten Satz zurückgibt.
 ```python
 # von talking.py: record()
 value = recognizer.recognize_google(audio, language=language_val)
@@ -123,7 +125,7 @@ ser.write((c.HostKey+str(Send_string)).encode())
     print("HOST Send: %s %s" % c.HostKey, Send_string)
 ```
 
-Die Empfangen Funktion stoppt das Programm solange bis es auf der Schnittstelle den gegebenen Wert: `Search_string` in den allen empfangenen Nachrichten: `data` findet.
+Die Empfangen Funktion stoppt das Programm so lange bis es auf der Schnittstelle den gegebenen Wert: `Search_string` in den allen empfangenen Nachrichten: `data` findet.
 (`Search_string` ist in späterer Anwendung immer der Identifizier Token des Clients)
 ```python
 # von talking.py: receive(Search_string)
@@ -146,7 +148,7 @@ Die Funktion gibt auch die Empfangenen Daten weiter<sup>1</sup>, sollten diese d
 Diese Funktion ist für das Abspielen von vorhandenen oder Computer generierten Tonaufnahmen verantwortlich.
 
 Hier nutze ich die Library: "os" (Im code: `c.os.xyz()`)
-Sie wird zur Systemunterscheidung von Windows & Linux, und zum ausführen von Befehlen genutzt.
+Sie wird zur Systemunterscheidung von Windows & Linux, und zum Ausführen von Befehlen genutzt.
 
 
 Hier durchsucht das Programm eine vordefinierte Liste an Tonaufnahmen in ./audio (Definiert in [config.py](config.py)) nach dem `play_string`.
@@ -164,12 +166,12 @@ Alternativ nutzt das Programm die Library: "**g**oogle-**T**ext-**T**o-**S**peec
 Im code:
 `gTTS("xyz", "de").xyz()`
 oder:
-`tts.xyz()`
-Hier schicken wir an google, was wir gerne gesagt haben wollen (`play_string`), und google schickt eine Computer-generierte Tonaufnahme zurück, diese wird dann gespeichert, abgespielt und gelöscht.
+`tts.xyz()`.
+Hier schicken wir an Google, was wir gerne gesagt haben wollen (`play_string`), und Google schickt eine Computer-generierte Tonaufnahme zurück, diese wird dann gespeichert, abgespielt und gelöscht.
 ```python
 # von talking.py: play(play_string)
 else:
-        # Create new audio by google
+        # Create new audio by Google
         print("Creating temporary audio")
         file = play_string+".mp3"
         tts = gTTS(play_string, c.language_val[0:2]) # Take first two char from language_val (de)_DE
@@ -196,10 +198,10 @@ while True: # Keep running even on false reply
 ```
 Hier gibt wird der Verlauf entschieden:
 1. Normal, Aufnehmen -> Servo verstellen.
-2. Spracherkennung Failsafe, Servo verstellen.
+2. Spracherkennung Fail safe, Servo verstellen.
 3. Konfiguration, Servo je nach Nutzer Eingabe verstellen.
 
-Nun wird entschieden ob das Wort in `recstring` den unser Gewünschtes Wort in `c.magic` ist.
+Nun wird entschieden, ob das Wort in `recstring` den unser Gewünschtes Wort in `c.magic` ist.
 ```python
 # von talking.py: main(), while True
 if recstring.lower() == c.magic.lower():
@@ -208,7 +210,7 @@ if recstring.lower() == c.magic.lower():
     break
 ```
 Wenn dies der Fall ist, nutzen die vorher erwähnte `send(Send_string)` Funktion, welche darauf den Identifizier Token mit 180 an den Client schicken wird.
-Wie der Client die Nachricht versteht wird im nächsten Kapitel ([opendoor.ino](opendoor.ino)) erläutert.
+Wie der Client die Nachricht versteht, wird im nächsten Kapitel ([opendoor.ino](opendoor.ino)) erläutert.
 
 Zuletzt wird noch alles an die Konsole weitergegeben was auf der Seriellen Schnittstelle ankommt. Sollte der Client Identifizier Token dabei sein, wird das Programm beendet. (Siehe Funktion [receive()](#funktionen-sendsendstring--receivesearchstring))
 ```python
@@ -223,7 +225,7 @@ Dies ist das Client Programm, welches für die Steuerung des Servos und Kommunik
 
 Hier nutzen wir `Servo.h`, eine Library (Im code: `Servo.xyz` oder auch `door.xyz()`)
 
-Am Anfang werden Setup Werte Konfiguriert:
+Am Anfang werden Setup Werte konfiguriert:
 ```cpp
 // von opendoor.ino
 #define StartDegree 0 // Start from on power reset
@@ -258,7 +260,7 @@ Hier wartet der Client bis auf der Seriellen Schnittstelle Nachrichten kommen, d
 if (incomingString.indexOf(HostKey) == 0){
             // If incomingString starts with HostKey, strip HostKey of incoming to find target & change rate
             int targetDegree = incomingString.substring(HostKey.length()).toInt();
-            int changeDegree = 4; // Degree to proceed in one turn
+            int changeDegree = 4; // Degree to continue in one turn
             int changeDelay = 10; // Delay in ms between turns
             int currDegree = door.read();
             int overflowDegree = (currDegree - targetDegree) % changeDegree;
@@ -267,12 +269,12 @@ if (incomingString.indexOf(HostKey) == 0){
 Sollte die Nachricht den Host Identifizier Token enthalten wird dieser abgeschnitten und der Rest in `targetDegree` gespeichert (Servo Zielposition).
 Außerdem wird festgelegt in welchen Schritten, in welchen Zeitabständen und in welche Richtung sich der Servo dreht, wobei letzteres automatisch passiert.
 
-Da nicht jede Ziel Position in jeder Schrittgröße von jeder Start position erreichbar ist, wird hier der Rest der Division von der Differenz von Start-Ziel Positionen durch die Schrittgröße genommen und zu der derzeitigen Position zugerechnet.
+Da nicht jede Ziel Position in jeder Schrittgröße von jeder Start Position erreichbar ist, wird hier der Rest der Division von der Differenz von Start-Ziel Positionen durch die Schrittgröße genommen und zu der derzeitigen Position zugerechnet.
 ```math
 overflowDegree =(DerzeitigePos-ZielPos) \bmod Schrittgröße \\
 (30-80)\bmod 4 = 2
 ```
-Bei dem Versuch sich von 30° nach 80° mit einer Schrittgröße von 4 zu drehen würde darin Enden, dass der Motor sich auf eine falsche oder sogar nicht vorhandene Position dreht (-2°), was Probleme verursacht.
+Bei dem Versuch sich von 30° nach 80° mit einer Schrittgröße von 4 zu rotieren, würde darin Enden, dass der Motor sich auf eine falsche oder sogar nicht vorhandene Position dreht (-2°), was Probleme verursacht.
 
 Also passt das Programm die derzeitige Position so an, dass diese Restlos mit der Schrittgröße Teilbar ist.
 ```cpp
@@ -283,7 +285,7 @@ if (overflowDegree != 0){
                 currDegree = currDegree + overflowDegree;
             }
 ```
-Nun ist die Ziel Position von der Start Position erreichbar und es kann gedreht werden, dies passiert in der folgende Schleife:
+Nun ist die Ziel Position von der Start Position erreichbar und es kann gedreht werden, dies passiert in der folgenden Schleife:
 ```cpp
 // von opendoor.ino: loop() if (Serial.available() > 0) -> if (incomingString.indexOf(HostKey) == 0)
 // Slow down rotation by rotating +changeDegree° every changeDelay ms
@@ -293,10 +295,12 @@ for (currDegree; currDegree!=targetDegree; currDegree += changeDegree) {
     delay(changeDelay);
     }
 ```
-Die Schleife läuft solange die derzeitige- von der Ziel- Position abweicht,
-bei jedem Durchlauf wird der Wert der derzeitigen Position (`currDegree`) um die Schrittgröße (`changeDegree`) inkrementiert und der Servomotor zur dem gesteigerten Wert gedreht.
+Die Schleife läuft so lange die derzeitige- von der Ziel- Position abweicht,
+bei jedem Durchlauf wird der Wert der derzeitigen Position (`currDegree`) um die Schrittgröße (`changeDegree`) inkrementiert und der Servomotor zu dem gesteigerten Wert gedreht.
 
-Bei der Beendung des Programms wird sichergestellt das der Servo auch wirklich an der gewünschten Position ist und es wird eine Nachricht an den Host geschickt, dass dieser aufhören soll Debug Nachrichten auf die Konsole ausgeben soll und sich selber beendet.
+![](video/demo_loop.gif)
+
+Bei der Beendung des Programms wird sichergestellt das der Servo auch wirklich an der gewünschten Position ist und es wird eine Nachricht an den Host geschickt, dass dieser aufhören soll, Debug Nachrichten auf die Konsole ausgeben soll und sich selbst beendet.
 ```cpp
 // von opendoor.ino: loop()
 door.write(targetDegree); // Close any remaining gap to target
@@ -314,5 +318,64 @@ Serial.println(ClientKey);
 ### Öffnungsmechanismus
 
 ### Software / Hardware
+
+Die Umsetzung ließ sich in einfachere Unterprobleme gruppieren:
+- Spracherkennung
+- Sprachausgabe
+- Tür Öffnung
+
+Da ein Mikrocontroller zur Ansteuerung des Motors sowieso benötigt wurde (mehr in [Tür Öffnung](#tür-öffnung))
+stand fest das ich ein separates Gerät zur Sprach- Erkennung/Ausgabe nutze.
+Schlussendlich brauchte ich ein Programm zur Kommunikation zwischen Computer<->Mikrocontroller.
+
+Das Vorwissen für eine solche Kommunikationsbrücke hatte ich bereits seit einer Wetterstation-Klausurleistung.
+Schlussendlich brauchte ich ein Programm zur Kommunikation zwischen Computer<->Mikrocontroller um den Motor anzusteuern.
+
+Das Vorwissen für eine solche Kommunikationsbrücke hatte ich bereits seit einer Wetterstation-Klausurleistung.
+#### Spracherkennung
+
+Anfangs hatte ich mir eine Software zur Spracherkennung rausgesucht, diese war aber eher als Home-Automation gedacht, also ein Programm zu Ausführung von simplen Befehlen bei Erkennung eines Wortes. Es wurde schnell klar, dass der Begriff "Software" nicht beschreibt was ich suchte.
+
+Kurz danach fand ich die Code-Library [SpeechRecognition](https://pypi.org/project/SpeechRecognition/), diese integrierte ich dann in das Programm der Kommunikationsbrücke.
+#### Sprachausgabe
+
+Die Sprachausgabe war eine Idee, welche im Verlauf des Projekts aufkam, die Tür sollte nicht nur bei dem Passwort aufgehen, sondern auch selber Kommentare machen können.
+
+Nach der Erfahrung in [Spracherkennung](#Spracherkennung) suchte ich nach einer ähnliche Library die ich schnell fand.
+Auch in [gTTS](https://pypi.org/project/gTTs/) schicken wir einen Text an Google und kriegen eine Audiodatei zurück.
+
+Allerdings nutzen wir nur vorgefertigte Audiodateien.
+
+#### Tür Öffnung 
+
+Zur Öffnung der Tür benötigten wir einen Motor, es gab mehrere Arten welche zur Auswahl standen:
+- Plain-Elektromotor
+- Stepper-Motor
+- Servo-Motor
+
+Ein einfacher Elektromotor dreht sich Kontinuierlich und benötigt ein zusätzliches Modul zum Rückwarstdrehen (Umdrehen der Spannung).
+
+Ein Stepper-Motor dreht sich in Schrittgrößen, also z.B. 200 Zähne (Am Zahnrad) vorwärts, allerdings hat dieser eine geringer Zugkraft und drehte sich nicht Rückwärts.
+
+Ein Servo erschien sehr schnell als nützlichste Art aufgrund der absolut-Grad-basierten Drehung und der hohen Zugkraft.
+Ursprünglich war die Drehung des Servo-Motors sehr abrupt.
+
+![](video/servo_fast.gif)
+
+Dies war zu schnell für unsere Anwendung, glücklicherweise ließ sich dies mit einer [Schleife](#genaueres---opendoorinohttpsgithubcomhorkrux8p5blobmainopendoorino) lösen.
+
+Wir zweifelten an der Kraft des Servos, dieser hatte eine Kraft von $2,5kg/cm$
+Dieser funktionierte mäßig während eines Testlaufs in der Werkstatt:
+
+[![](video/thumbnails/tür_testlauf.png)](video/tür_testlauf.mp4)
+
+Nach dem Fehlschlag während der 2. Konsultationssitzung sind wir auf einen größeren Servo umgestiegen, dieser unterstützt $10kg/cm$
+
+![](images/servo_big.jpg)
+
+Dieser hatte bei weiter mehr Kraft und erfüllte unsere Anforderungen:
+
+![](video/mechanismus_loop.gif)
+
 
 ### Qualitätsprüfung
