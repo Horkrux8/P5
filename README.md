@@ -98,7 +98,9 @@ value = recognizer.recognize_google(audio, language=language_val)
 ```
 Danach wird `value` "decoded", also in normale Schrift umgewandelt und weitergegeben.
 
-##### Funktionen: `send(Send_string)` & `receive(Search_string)`
+<h5 id="funktionen-send-receive">
+Funktionen: <code>send(Send_string)</code> & <code>receive(Search_string)</code>
+</h5>
 
 Diese Funktion ist der Sende Teil der Seriellen Kommunikation (**U**niversal-***S**erial*-**B**us)
 
@@ -212,14 +214,16 @@ if recstring.lower() == c.magic.lower():
 Wenn dies der Fall ist, nutzen die vorher erwähnte `send(Send_string)` Funktion, welche darauf den Identifizier Token mit 180 an den Client schicken wird.
 Wie der Client die Nachricht versteht, wird im nächsten Kapitel ([opendoor.ino](opendoor.ino)) erläutert.
 
-Zuletzt wird noch alles an die Konsole weitergegeben was auf der Seriellen Schnittstelle ankommt. Sollte der Client Identifizier Token dabei sein, wird das Programm beendet. (Siehe Funktion [receive()](#funktionen-sendsendstring--receivesearchstring))
+Zuletzt wird noch alles an die Konsole weitergegeben was auf der Seriellen Schnittstelle ankommt. Sollte der Client Identifizier Token dabei sein, wird das Programm beendet. (Siehe Funktion [receive()](#funktionen-send-receive))
 ```python
 # von talking.py: main(), while True
 receive(c.ClientKey) # Read esp serial debug
 ser.close()
 ```
 
-#### Genaueres - [opendoor.ino](https://github.com/Horkrux8/P5/blob/main/opendoor.ino)
+<h4 id="genaueres-opendoor.ino">
+Genaueres - <a href="opendoor.ino">opendoor.ino</a>
+</h4>
 
 Dies ist das Client Programm, welches für die Steuerung des Servos und Kommunikation mit dem Host zuständig ist.
 
@@ -317,6 +321,26 @@ Serial.println(ClientKey);
 
 ### Öffnungsmechanismus
 
+Die Planung des Öffnungsmechanismus für unser P5 Projekt hat mit einer Recherchephase begonnen. Ich hatte mir Öffnungsmechanismen für Türen angeschaut, in einem Dokument gesammelt und mit eignenden Ideen vervollständigt. 
+Anschließend habe ich die Mechanismen auf Funktionalität und Umsetzbarkeit in unserem Modell geprüft. Im Wesentlichen haben sich 2 infrage kommende Öffnungsmechanismen gebildet.
+
+#### Ein-Schienen Mechanismus
+
+Bei dieser Konstruktion wird der Servomotor wird oberhalb der Tür befestigt, und bewegt nach unten gehend einen Metallrotor um etwa 90 grad. Der Rotor ist durch eine Metallschiene oben an der Tür befestigt. 
+
+![](images/Ein-Schienen_Mechanismus.png)
+
+Dies hat den Vorteil das es im Vergleich zum [Zwei-Schienen Mechanismus](#zwei-schienen-mechanismus) simple zum Konstruieren ist. 
+
+#### Zwei-Schienen Mechanismus
+
+Der Zwei-Schienen Mechanismus übersetzt eine Drehung von 180 grad in eine Öffnung von 90 grad.
+
+![](images/Zwei-Schienen_Mechanismus.jpg)
+
+Dies bringt den Vorteil dass der Motor mit Doppelter Kraft agieren kann, ist aber wesentlich komplexer.
+
+
 ### Software / Hardware
 
 Die Umsetzung ließ sich in einfachere Unterprobleme gruppieren:
@@ -341,7 +365,7 @@ Kurz danach fand ich die Code-Library [SpeechRecognition](https://pypi.org/proje
 
 Die Sprachausgabe war eine Idee, welche im Verlauf des Projekts aufkam, die Tür sollte nicht nur bei dem Passwort aufgehen, sondern auch selber Kommentare machen können.
 
-Nach der Erfahrung in [Spracherkennung](#Spracherkennung) suchte ich nach einer ähnliche Library die ich schnell fand.
+Nach der Erfahrung in [Spracherkennung](#spracherkennung) suchte ich nach einer ähnliche Library die ich schnell fand.
 Auch in [gTTS](https://pypi.org/project/gTTs/) schicken wir einen Text an Google und kriegen eine Audiodatei zurück.
 
 Allerdings nutzen wir nur vorgefertigte Audiodateien.
@@ -362,7 +386,7 @@ Ursprünglich war die Drehung des Servo-Motors sehr abrupt.
 
 ![](video/servo_fast.gif)
 
-Dies war zu schnell für unsere Anwendung, glücklicherweise ließ sich dies mit einer [Schleife](#genaueres---opendoorinohttpsgithubcomhorkrux8p5blobmainopendoorino) lösen.
+Dies war zu schnell für unsere Anwendung, glücklicherweise ließ sich dies mit einer [Schleife](#genaueres-opendoor.ino) lösen.
 
 Wir zweifelten an der Kraft des Servos, dieser hatte eine Kraft von $2,5kg/cm$
 Dieser funktionierte mäßig während eines Testlaufs in der Werkstatt:
