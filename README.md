@@ -59,6 +59,7 @@ Der Client durchsucht dann die empfangene Nachricht nach der Servo Konfiguration
 ---
 
 - Im folgenden Text wird des Öfteren `in-Zeilen-Code` referiert (Dieser ist in den Blöcken wiederzufinden).
+
 - ##### Funktionen: `Funktions-Namen()` in Überschriften
 
 - Codeblöcke mit einer Generellen Beschreibung darüber:
@@ -184,6 +185,7 @@ else:
 ```
 
 ##### Funktion: `main()`
+
 Diese Funktion verknüpft alles zusammen in einer geordneten Ablaufstruktur. Sie wird am Ende aufgerufen.
 
 ```python
@@ -340,7 +342,6 @@ Der Zwei-Schienen Mechanismus übersetzt eine Drehung von 180 grad in eine Öffn
 
 Dies bringt den Vorteil dass der Motor mit Doppelter Kraft agieren kann, ist aber wesentlich komplexer.
 
-
 ### Software / Hardware
 
 Die Umsetzung ließ sich in einfachere Unterprobleme gruppieren:
@@ -356,11 +357,13 @@ Das Vorwissen für eine solche Kommunikationsbrücke hatte ich bereits seit eine
 Schlussendlich brauchte ich ein Programm zur Kommunikation zwischen Computer<->Mikrocontroller um den Motor anzusteuern.
 
 Das Vorwissen für eine solche Kommunikationsbrücke hatte ich bereits seit einer Wetterstation-Klausurleistung.
+
 #### Spracherkennung
 
 Anfangs hatte ich mir eine Software zur Spracherkennung rausgesucht, diese war aber eher als Home-Automation gedacht, also ein Programm zu Ausführung von simplen Befehlen bei Erkennung eines Wortes. Es wurde schnell klar, dass der Begriff "Software" nicht beschreibt was ich suchte.
 
 Kurz danach fand ich die Code-Library [SpeechRecognition](https://pypi.org/project/SpeechRecognition/), diese integrierte ich dann in das Programm der Kommunikationsbrücke.
+
 #### Sprachausgabe
 
 Die Sprachausgabe war eine Idee, welche im Verlauf des Projekts aufkam, die Tür sollte nicht nur bei dem Passwort aufgehen, sondern auch selber Kommentare machen können.
@@ -402,4 +405,119 @@ Dieser hatte bei weiter mehr Kraft und erfüllte unsere Anforderungen:
 ![](video/mechanismus_loop.gif)
 
 
-### Qualitätsprüfung
+### Türbau & Qualitätsprüfung
+
+Der Türbau wurde auf verschieden Tage aufgeteilt, es gab verschieden Probleme, welche wir überkommen mussten, um unser Ziel zu erreichen.  
+
+ 
+Der erste Schritt für den Türbau, war es anhand des schon im Voraus in der Gruppe besprochenen Maßstabs einen generellen Bauplan zu erstellen, von welchem wir ausgehen konnten. Nachdem wir uns auf einen Bauplan von mehreren verschiedenen entschieden haben, konnte die Arbeit Anfangen. 
+
+Jedoch brauchten wir zunächst die Materialien, welche wir mit der Hilfe eines Materialisten bei Inga der Zuständigen für die Materialbeschaffung anfragten. 
+
+Nun fehlten uns nur noch gewisse Räumlichkeiten um eine Tür zu bauen, dabei haben wir uns für den Hacker Space entschieden, welcher uns viele verschiedene Möglichkeiten sowie Materialien bietet und Werkzeuge gibt, welche für den Bau einer Tür nützlich sein könnten. 
+
+Nachdem wir nun alle Materialien sowie Räumlichkeiten für den Anfang zu Verfügung hatten konnten wir mit dem ersten Teil anfangen.  
+
+#### Türrahmen
+
+Wir haben uns dafür entschieden ein Teil eines Bilderrahmens als Grund Gerüst für unseren Rahmen zu nutzen, an welchem wir dann an die Tür befestigen werden. 
+
+Dieser Bilderrahmen wurde so modifiziert, dass er auf der unteren Seite offen ist. Um die rauen Kanten an den Sägestellen zu entfernen, nutzten wir Schleifpapier sowie Größeres Werkzeug.
+
+![Justus mit Schleifmaschine](images/Schleifen_justus.JPG)
+
+![Feiner Nachschliff](images/Schleifen_justus2.JPG)
+
+#### Türfront
+
+Nachdem das Ramen Gerüst genau ausgemessen wurde, haben wir uns für eine Dünne Holzplatte entschiedenen welche wir als Tür benutzen würden. Diese mussten wir jedoch zunächst zurechtschneiden. 
+
+Der erste Schritt um unsere Ziel einer fertigen Tür zu erreichen, war es auf der großen Holzplatte Linie einzuzeichnen anhand welcher wir sie Teilen würden. Die Schnittstellen bestimmten wir anhand der Größe des Türrahmens, so mussten wir die Holzplatte ungefähr bei der Hälfte zersägen. 
+
+Im Nächsten Schritt spannten wir die Holzplatte mit Hilfe von Schraubstöcken an einen Tisch, damit sie beim beim Zersägen nicht zu stark vibriert und die Schnittstelle grade blieb.
+
+![](images/T%C3%BCr_front.JPG)
+
+Nun mussten wir nur noch die Schnittstellen glattschleifen, im Gegensatz zum Rahmen Gerüst nutzen wird dafür nur Schleifpapier, da anderes Werkzeug das dünne Holz beschädigen könnte. 
+
+Bevor wir jedoch die Tür weiterbearbeiteten, zeichneten wir die Umrisse der „Fetten Dame“ auf der Holzplatte ein, hierfür nutzen wir einen Beamer, um eine gute Vorlage zu haben.
+
+<a id="zeichnung"></a>
+
+<p align="middle">
+  <img src="images/T%C3%BCr_zeichnen.JPG" height="450" />
+  <img src="images/T%C3%BCr_zeichnen1.JPG" width="300" /> 
+</p>
+
+
+#### Scharniere
+
+Jetzt konnten wir uns drauf konzentrieren, wie die Tür mit dem Rahmen verbunden wird, hierfür nutzen wir normale Türscharniere wie sie in den Abbildungen zu sehen sind, welche mit einem Metallstift die Tür mit dem Rahmen verbinden. 
+
+<p align="middle">
+  <img src="images/Scharniere.JPG" height="450" />
+  <img src="images/Scharniere1.JPG" width="300" /> 
+</p>
+
+Um die Scharniere mit dem Rahmen zu verbinden, spannten wir den Rahmen mit Schraubstöcken an den Tisch und schraubten die Scharniere per Hand oder Elektroschrauber rein.
+
+<p align="middle">
+    <img src="images/Scharniere2.JPG" height="400" />
+    <img src="images/Scharniere3.JPG" height="400" />
+</p>
+
+Nachdem die Scharniere am Rahmen befestigt wurden, musste jedoch noch ein paar an der Tür montiert werden, deswegen bauten wir eine Holzstütze für die Tür, in welche wir die Scharniere schrauben konnten, ohne das Holz zu beschädigen. 
+
+Dafür sägten wir zwei Holzplanken in passende Teile, damit wir sie am Rand der Tür anbringen konnten. 
+
+![](images/Saegen.JPG)
+
+Die Holzplanken befestigten wir mithilfe von Holzkleber an der Holzplatte und Schraubstöcken, welche zur Fixierung dienten. Die Tür wurde auf dem Tisch rotiert, um alle Holzplanken gleichmäßig auf der Platte zu befestigen. 
+
+<p align="middle">
+    <img src="images/Kleben.JPG" height="300" />
+    <img src="images/Kleben1.JPG" height="300" />
+</p>
+
+Nachdem wir den Rahmen an der Tür angebracht haben, konnten wir nun auch die Scharniere befestigen. Dabei mussten wir auf die rotations-Richtung sowie die Position achten. 
+
+Nach der Befestigung der Scharniere musste man nur noch die Tür mithilfe der Metallstifte einhaken.
+
+![](images/Tag1Final.JPG)
+
+#### Türbeine
+
+Die Türbeine dienen dazu, dass die Tür aufrecht stehen kann und nicht festgehalten oder angelehnt werden muss. 
+Jetzt wo nur noch Beine für die Gesamte Tür fehlen, wurde der Öffnungs-/Schließ-mechanismus eingebaut. 
+
+Der Nächste Schritt bestand daraus zwei große passende Holzplanken zu finden, welche massive genug sind um das Gleichgewicht der Tür zu halten. Diese Holzplanken befestigten wir nun an der offenen Unterseite des Rahmens mit Hilfe von Metall Eckwinkel.
+
+In der Abbildung ist die verpackte Tür mit sichtbaren Holzplanken als Beinen.
+
+![](images/Tag4Final.JPG)
+
+#### Gemälde
+
+Der letzte Schritt zur vollständigen Tür, war die Fertigstellung des Gemäldes der "Fetten Dame", dies ist die Leistung einer unserer [externen Helfer]().
+
+![](video/t%C3%BCr_testlauf1.gif)
+
+### Externe Hilfe
+
+Unser Projekt hat auch Unterstützung von außerhalb der Gruppe bekommen.
+Deshalb vielen Dank an.
+
+#### Mikal
+
+Als Veranstaltungstechniker am TBZ brachte er mehr handwerkliches Wissen in Form von "freundlicher" Kritik ein, als wir gebündelt erreicht hätten. 
+
+#### Catharina
+
+Nach Kunst-LK in der Schule und eigenem Interesse am Malen erklärte Sie sich freundlicherweise dazu unsere [Zeichnung](#zeichnung) in ein [Gemälde](#gemälde) zu verwandeln.
+
+#### Hr. Scheichel
+
+Als Binf Lehrer hat er Motoren die wir getestet, aber letztendlich zurückgegeben haben, und unseren Mikrocontroller beigesteuert.
+
+
+
